@@ -20,6 +20,8 @@ const QUESTIONNAIRES = {
 
 const SUBJECT = "Dein Fragebogen — Achilles Altona";
 const SENDER_NAME = "Praxis Achilles Altona";
+const DAILY_LIMIT = 100;
+const TIMEZONE = "Europe/Berlin";
 
 function doPost(e) {
   try {
@@ -37,17 +39,60 @@ function doPost(e) {
     const q = QUESTIONNAIRES[key];
     if (!q) return json({ ok: false, error: "Unbekannter Fragebogen." });
 
-    MailApp.sendEmail({
-      to: recipient,
-      name: SENDER_NAME,
-      subject: SUBJECT,
-      htmlBody: buildHtmlBody(q),
-      body: buildPlainBody(q)
-    });
+    const counter = reserveDailySlot();
+    if (!counter.ok) {
+      return json({ ok: false, error: "Tageslimit erreicht (" + DAILY_LIMIT + " Mails). Bitte morgen erneut versuchen." });
+    }
+
+    try {
+      MailApp.sendEmail({
+        to: recipient,
+        name: SENDER_NAME,
+        subject: SUBJECT,
+        htmlBody: buildHtmlBody(q),
+        body: buildPlainBody(q)
+      });
+    } catch (mailErr) {
+      releaseDailySlot();
+      throw mailErr;
+    }
 
     return json({ ok: true });
   } catch (err) {
     return json({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+function reserveDailySlot() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const today = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd");
+    const storedDate = props.getProperty("counterDate");
+    let count = (storedDate === today)
+      ? parseInt(props.getProperty("counterValue") || "0", 10)
+      : 0;
+    if (count >= DAILY_LIMIT) return { ok: false, count: count };
+    props.setProperties({
+      counterDate: today,
+      counterValue: String(count + 1)
+    });
+    return { ok: true, count: count + 1 };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function releaseDailySlot() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const count = parseInt(props.getProperty("counterValue") || "0", 10);
+    if (count > 0) props.setProperty("counterValue", String(count - 1));
+  } finally {
+    lock.releaseLock();
   }
 }
 
