@@ -63,8 +63,8 @@ input, button { font-family: inherit; color: inherit; }
   outline: none;
 }
 .app__mail input:focus {
-  border-color: var(--color-light);
-  box-shadow: 0 0 0 3px rgba(82, 198, 226, 0.3);
+  border-color: var(--color-dark);
+  box-shadow: 0 0 0 3px rgba(0, 65, 101, 0.25);
 }
 
 .app__grid {
@@ -82,8 +82,8 @@ input, button { font-family: inherit; color: inherit; }
   font-size: 1.1rem;
   font-weight: 700;
   text-align: left;
-  background: var(--color-light);
-  color: var(--color-dark);
+  background: var(--color-dark);
+  color: var(--color-white);
   border: 2px solid var(--color-dark);
   border-radius: var(--radius);
   cursor: pointer;
