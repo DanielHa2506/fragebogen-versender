@@ -61,14 +61,42 @@
   });
 
   function buildGrid() {
-    CONFIG.questionnaires.forEach((q) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "tile";
-      btn.textContent = q.label;
-      btn.dataset.key = q.key;
-      btn.addEventListener("click", () => handleClick(q));
-      grid.appendChild(btn);
+    CONFIG.groups.forEach((group) => {
+      const section = document.createElement("section");
+      section.className = "group";
+
+      const heading = document.createElement("h2");
+      heading.className = "group__title";
+      heading.textContent = group.region;
+      section.appendChild(heading);
+
+      const tiles = document.createElement("div");
+      tiles.className = "group__tiles";
+
+      group.items.forEach((q) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "tile";
+        btn.dataset.key = q.key;
+
+        const name = document.createElement("span");
+        name.className = "tile__name";
+        name.textContent = q.label;
+        btn.appendChild(name);
+
+        if (q.desc) {
+          const desc = document.createElement("span");
+          desc.className = "tile__desc";
+          desc.textContent = q.desc;
+          btn.appendChild(desc);
+        }
+
+        btn.addEventListener("click", () => handleClick(q));
+        tiles.appendChild(btn);
+      });
+
+      section.appendChild(tiles);
+      grid.appendChild(section);
     });
   }
 
