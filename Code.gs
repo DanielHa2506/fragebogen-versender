@@ -2,7 +2,9 @@
 // Muss im Account post@achilles-altona.de deployt werden,
 // damit der Absender automatisch post@achilles-altona.de ist.
 
-const TOKEN = "AA-2026-YlZxl66JKp19l4kbI7EiY3TTZ4JY";
+// Nur der SHA-256-Hash des Tokens steht hier (das Repo ist öffentlich).
+// Das Token selbst liegt in 1Password: „Fragebogen-Versender Token (AA)“.
+const TOKEN_SHA256 = "38cacc80621168c8bcaaf45ad4ad74ffba3ae413cd95d4938703429c48b36ef2";
 
 const QUESTIONNAIRES = {
   alr_rsi:    { label: "ALR-RSI Skala",          url: "https://form.jotform.com/260753429924363" },
@@ -33,7 +35,7 @@ function doPost(e) {
     const recipient = (body.recipient || "").trim();
     const key = body.key;
 
-    if (token !== TOKEN) return json({ ok: false, error: "Nicht autorisiert." });
+    if (!isValidToken(token)) return json({ ok: false, error: "Nicht autorisiert." });
     if (!isValidEmail(recipient)) return json({ ok: false, error: "Ungültige Mailadresse." });
 
     const q = QUESTIONNAIRES[key];
@@ -146,4 +148,11 @@ function json(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function isValidToken(token) {
+  if (typeof token !== "string" || !token) return false;
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, token, Utilities.Charset.UTF_8);
+  const hex = bytes.map(function (b) { return ((b + 256) % 256).toString(16).padStart(2, "0"); }).join("");
+  return hex === TOKEN_SHA256;
 }

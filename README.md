@@ -12,23 +12,22 @@ Kleine iPad-Webapp, mit der die Anmeldung mit zwei Taps einen JotForm-Fragebogen
 
 ### 1. Token festlegen
 
-Sich eine lange Zufallszeichenkette ausdenken (oder generieren), z. B.:
+Das Token liegt in 1Password, Eintrag **„Fragebogen-Versender Token (AA)“** (Tresor Personal). Es steht **nie** im Repo — das Repo ist öffentlich.
+
+In `Code.gs` steht nur der SHA-256-Hash (`TOKEN_SHA256`). Neuen Hash erzeugen, ohne das Token anzuzeigen:
 
 ```
-AchillesAltona-2026-Px7q9m2vB4nLk
+op read "op://Personal/vtzbnnz7isodtuodkv6moqm2c4/password" | tr -d '\n' | shasum -a 256
 ```
 
-Diesen Wert an **zwei Stellen** eintragen:
-
-- `Code.gs`: Konstante `TOKEN` ersetzen.
-- iPad-Link: hinter `#k=` im Lesezeichen (siehe Schritt 4).
+Das Token selbst kommt nur in den iPad-Link hinter `#k=` (siehe Schritt 5).
 
 ### 2. Apps Script Web App anlegen
 
 1. Im Browser **mit `post@achilles-altona.de` einloggen** (nicht mit einem persönlichen Account).
 2. `https://script.google.com` öffnen → **Neues Projekt**.
 3. Den Standardcode löschen, Inhalt von `Code.gs` einfügen.
-4. Token in der `TOKEN`-Konstante eintragen, speichern.
+4. Speichern (der Hash steht bereits in `TOKEN_SHA256`).
 5. **Bereitstellen → Neue Bereitstellung** → Typ „Webanwendung".
    - Ausführen als: **Ich** (`post@achilles-altona.de`)
    - Zugriff: **Alle**
@@ -75,8 +74,9 @@ Nach Änderung in `Code.gs` muss eine **neue Bereitstellung** im Apps Script ers
 
 ## Token tauschen (z. B. nach Verlust eines iPads)
 
-1. In `Code.gs` neuen Wert für `TOKEN` setzen, Bereitstellung aktualisieren.
-2. Auf allen iPads das Lesezeichen mit dem neuen `#k=…`-Wert ersetzen.
+1. Neues Token im 1Password-Eintrag erzeugen, Hash wie in Schritt 1 bilden.
+2. In `Code.gs` `TOKEN_SHA256` ersetzen, im Apps Script einfügen, **Bereitstellung verwalten → Bearbeiten → Version: Neue Version** (sonst läuft unter `/exec` der alte Code weiter).
+3. Auf allen iPads das Lesezeichen mit dem neuen `#k=…`-Wert ersetzen.
 
 ## Limits
 
