@@ -28,7 +28,7 @@ Das Token selbst kommt nur in den iPad-Link hinter `#k=` (siehe Schritt 5).
 2. `https://script.google.com` öffnen → **Neues Projekt**.
 3. Den Standardcode löschen, Inhalt von `Code.gs` einfügen.
 4. Speichern (der Hash steht bereits in `TOKEN_SHA256`).
-5. **Bereitstellen → Neue Bereitstellung** → Typ „Webanwendung".
+5. **Bereitstellen → Neue Bereitstellung** → Typ „Webanwendung“.
    - Ausführen als: **Ich** (`post@achilles-altona.de`)
    - Zugriff: **Alle**
 6. Beim ersten Deployment fragt Google nach Berechtigungen (Mailversand). Bestätigen.
@@ -60,8 +60,8 @@ Dann **Teilen → Zum Home-Bildschirm**. Das Token bleibt im Lesezeichen erhalte
 1. App vom Home-Bildschirm öffnen.
 2. Patient:innen-Mailadresse eintippen.
 3. Auf den gewünschten Fragebogen tippen.
-4. Bestätigungsdialog mit „Senden" bestätigen.
-5. Toast „✓ … gesendet" — Mailfeld wird automatisch geleert.
+4. Bestätigungsdialog mit „Senden“ bestätigen.
+5. Toast „✓ … gesendet“ — Mailfeld wird automatisch geleert.
 
 ## Fragebögen hinzufügen / ändern
 
@@ -86,5 +86,5 @@ Google Workspace erlaubt bis zu ~1500 Mails pro Tag über `MailApp` — für den
 
 - Versand erfolgt komplett über Google Workspace (eigener AV-Vertrag mit Google).
 - Keine Drittanbieter zwischengeschaltet.
-- Jeder Versand wird im „Gesendet"-Ordner von `post@achilles-altona.de` archiviert — vollständige Nachvollziehbarkeit.
-- Antworten der Patient:innen (z. B. „falscher Fragebogen") landen wieder im `post@`-Postfach.
+- Jeder Versand wird im „Gesendet“-Ordner von `post@achilles-altona.de` archiviert — vollständige Nachvollziehbarkeit.
+- Antworten der Patient:innen (z. B. „falscher Fragebogen“) landen wieder im `post@`-Postfach.
