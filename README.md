@@ -77,6 +77,8 @@ Nach Änderung in `Code.gs` muss eine **neue Bereitstellung** im Apps Script ers
 1. Neues Token im 1Password-Eintrag erzeugen, Hash wie in Schritt 1 bilden.
 2. In `Code.gs` `TOKEN_SHA256` ersetzen, im Apps Script einfügen, **Bereitstellung verwalten → Bearbeiten → Version: Neue Version** (sonst läuft unter `/exec` der alte Code weiter).
 3. Auf allen iPads das Lesezeichen mit dem neuen `#k=…`-Wert ersetzen.
+   **Achtung:** Die Praxis-iPads bekommen den Webclip über die Geräteverwaltung, und zwar aus **zwei Blueprints** – „Management“ und „Mitarbeiter“. In **beiden** muss die Webclip-Adresse geändert werden. Am 02.11.2026 wurde nur einer geändert, die Mitarbeiter-iPads meldeten danach beim Versand „Nicht autorisiert.“
+4. Probeversand von je einem iPad aus jedem Blueprint.
 
 ## Limits
 
